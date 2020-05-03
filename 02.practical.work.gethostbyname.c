@@ -1,4 +1,4 @@
-##Source Code C
+## Source Code C
 
 ```
 #include <stdio.h> 
@@ -31,10 +31,21 @@ void checkHostEntry(struct hostent * hostentry)
     } 
 } 
   
+// Converts space-delimited IPv4 addresses to dotted-decimal format 
+void checkIPbuffer(char *IPbuffer) 
+{ 
+    if (NULL == IPbuffer) 
+    { 
+        perror("inet_ntoa"); 
+        exit(1); 
+    } 
+} 
+  
 // Driver code 
 int main() 
 { 
-    char hostbuffer[100]; 
+    char hostbuffer[256]; 
+    char *IPbuffer; 
     struct hostent *host_entry; 
     int hostname; 
   
@@ -45,22 +56,27 @@ int main()
     // To retrieve host information 
     host_entry = gethostbyname(hostbuffer); 
     checkHostEntry(host_entry); 
-
+  
+    // To convert an Internet network address into ASCII string 
+    IPbuffer = inet_ntoa(*((struct in_addr*) 
+                           host_entry->h_addr_list[0])); 
   
     printf("Hostname: %s\n", hostbuffer); 
+    printf("Host IP: %s", IPbuffer); 
   
     return 0; 
-}
+} 
 ```
 
-##Complie in Ubuntu
+## Compile in Ubuntu
 
-###Input Command
+### Input Command
 ```
 deensbn@ubuntu:~$ gcc /home/deensbn/Desktop/main.c -o main
 deensbn@ubuntu:~$ ./main
 ```
-###Retrieve
+### Retrieve
 ```
 Hostname: ubuntu
+HostIP: 127.0.1.1
 ```
