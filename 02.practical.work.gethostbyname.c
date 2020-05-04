@@ -1,6 +1,3 @@
-## Source Code C
-
-```
 #include <stdio.h> 
 #include <stdlib.h> 
 #include <unistd.h> 
@@ -66,17 +63,3 @@ int main()
   
     return 0; 
 } 
-```
-
-## Compile in Ubuntu
-
-### Input Command
-```
-deensbn@ubuntu:~$ gcc /home/deensbn/Desktop/main.c -o main
-deensbn@ubuntu:~$ ./main
-```
-### Retrieve
-```
-Hostname: ubuntu
-HostIP: 127.0.1.1
-```
