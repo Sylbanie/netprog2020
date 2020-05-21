@@ -40,6 +40,13 @@ int main(int argc, char *argv[])
      return 0; 
 }
 
+size_t d_strlen(const char *in)
+{
+    size_t len = 0;
+    while( !(in[len] == '\0' && in[len+1] == '\0' )) ++len;
+    return len;
+}
+
 void error(char *msg)
 {
     perror(msg);
