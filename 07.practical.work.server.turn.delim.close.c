@@ -21,30 +21,23 @@ int main(int argc, char *argv[])
 
      if (bind(sockfd, (struct sockaddr *) &serv_addr,
               sizeof(serv_addr)) < 0) 
-              error("ERROR on binding\0");
+              error("ERROR on binding\n");
      listen(sockfd,5);
      clilen = sizeof(cli_addr);
 
      newsockfd = accept(sockfd, (struct sockaddr *) &cli_addr, &clilen);
      if (newsockfd < 0) 
-          error("ERROR on accept\0");
+          error("ERROR on accept\n");
 
      bzero(buffer,100);
      n = read(newsockfd,buffer,99);
      if (n < 0) 
-          error("ERROR reading from socket\0");
+          error("ERROR reading from socket\n");
      printf("Here is the message: %s\n",buffer);
-     n = write(newsockfd,"Received your message\0",18);
+     n = write(newsockfd,"Received your message\n",18);
      if (n < 0) 
-          error("ERROR writing to socket\0");
+          error("ERROR writing to socket\n");
      return 0; 
-}
-
-size_t d_strlen(const char *in)
-{
-    size_t len = 0;
-    while( !(in[len] == '\0' && in[len+1] == '\0' )) ++len;
-    return len;
 }
 
 void error(char *msg)
