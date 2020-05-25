@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
     printf("%s\n",buffer);
     return 0;
     
-    if(strncmp("/dc", msg, 3) == 0) 
+    if(strncmp("/quit", msg, 5) == 0) 
         { 
             printf("Disconnecting...\n"); 
             shutdown(sockfd, SHUT_RDWR);
@@ -70,4 +70,3 @@ void error(char *msg)
     exit(0);
 }
 
-int close(int sockfd);
