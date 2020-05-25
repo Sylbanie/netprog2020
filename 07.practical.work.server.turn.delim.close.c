@@ -37,7 +37,15 @@ int main(int argc, char *argv[])
      n = write(newsockfd,"Received your message\n",18);
      if (n < 0) 
           error("ERROR writing to socket\n");
-     return 0; 
+     return 0;
+     
+     if(strncmp("/dc", buff, 3) == 0) 
+        { 
+            printf("Disconnecting...\n"); 
+            shutdown(sockfd, SHUT_RDWR);
+            close(sockfd);
+            break; 
+        }
 }
 
 void error(char *msg)
@@ -45,5 +53,3 @@ void error(char *msg)
     perror(msg);
     exit(1);
 }
-
-int close(int sockfd);
