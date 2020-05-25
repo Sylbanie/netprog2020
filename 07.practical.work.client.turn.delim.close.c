@@ -30,6 +30,8 @@ int main(int argc, char *argv[])
         exit(0);
     }
     
+    while (1)
+    {
     bzero((char *) &serv_addr, sizeof(serv_addr));
     serv_addr.sin_family = AF_INET;
     bcopy((char *)server->h_addr, 
@@ -62,6 +64,7 @@ int main(int argc, char *argv[])
             close(sockfd);
             break; 
         }
+    }
 }
 
 void error(char *msg)
