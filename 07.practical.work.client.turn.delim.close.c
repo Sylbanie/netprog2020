@@ -54,6 +54,14 @@ int main(int argc, char *argv[])
          error("ERROR reading from socket\n");
     printf("%s\n",buffer);
     return 0;
+    
+    if(strncmp("/dc", msg, 3) == 0) 
+        { 
+            printf("Disconnecting...\n"); 
+            shutdown(sockfd, SHUT_RDWR);
+            close(sockfd);
+            break; 
+        }
 }
 
 void error(char *msg)
