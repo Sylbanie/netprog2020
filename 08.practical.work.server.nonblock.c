@@ -19,52 +19,47 @@ int main(int argc, char *argv[])
      struct sockaddr_in serv_addr, cli_addr;
 
      sockfd = socket(AF_INET, SOCK_STREAM, 0);
+     setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &(int){1}, sizeof(int));
      if (sockfd < 0) 
         error("ERROR opening socket");
 
      bzero((char *) &serv_addr, sizeof(serv_addr));
-
-     last_fd = sockfd;
      
      serv_addr.sin_family = AF_INET;
      serv_addr.sin_addr.s_addr = INADDR_ANY;
      serv_addr.sin_port = htons(8784);
      
      if (bind(sockfd, (struct sockaddr *) &serv_addr,
-              sizeof(serv_addr)) < 0) 
-              error("ERROR on binding\n");
+        sizeof(serv_addr)) < 0)
+        error("ERROR on binding\n");
      listen(sockfd,5);
      clilen = sizeof(cli_addr);
 
      newsockfd = accept(sockfd, (struct sockaddr *) &cli_addr, &clilen);
      if (newsockfd < 0) 
-          error("ERROR on accept\n");
-     fcntl(last_fd, F_SETFL, O_NONBLOCK);
-     fcntl(new_fd, F_SETFL, O_NONBLOCK);
+        error("ERROR on accept\n");
      
      while (1)
      {
-     setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &(int){1}, sizeof(int));
-     int fl = fcntl(sockfd, F_GETFL, 0);
+        int fl = fcntl(sockfd, F_GETFL, 0);
+        fl |= O_NONBLOCK;
+        fcntl(fd, F_SETFL, fl);
+         
+        bzero(buffer,100);
+        n = read(newsockfd,buffer,99);
+        if (n < 0) 
+              error("ERROR reading from socket\n");
+        printf("Here is the message: %s\n",buffer);
+        n = scanf(newsockfd,"Received your message\n",21);
      
-     bzero(buffer,100);
-     n = read(newsockfd,buffer,99);
-     if (n < 0) 
-          error("ERROR reading from socket\n");
-     printf("Here is the message: %s\n",buffer);
-     n = write(newsockfd,"Received your message\n",18);
-     fcntl(new_fd, F_SETFL, O_NONBLOCK);
-     last_fd = new_fd;
+        if (n < 0) 
+              error("ERROR writing to socket\n");
      
-     if (n < 0) 
-          error("ERROR writing to socket\n");
-     return 0;
-     
-     if(strncmp("/dc", buffer, 3) == 0) 
+        if(strncmp("/dc", buffer, 3) == 0) 
         { 
-          printf("Disconnecting...\n"); 
-          shutdown(sockfd, SHUT_RDWR);
-          close(sockfd);
+              printf("Disconnecting...\n"); 
+              shutdown(newsockfd, SHUT_RDWR);
+              close(sockfd);
         }
       break;
       }
